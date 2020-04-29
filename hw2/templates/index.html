@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Foodtrucks</h2>
+
+    <h3>Add <a href="{{ url_for('add') }}">here</a></h3>
+    <h3>Entries</h3>
+    {% for entry in entries %}
+        <p class=entry>
+            {{ entry.name }} &lt;{{ entry.address}}&gt;
+<!--	    <br>signed on {{ entry.signed_on }}<br>-->
+<!--	    {{ entry.message }}-->
+        </p>
+    {% endfor %}
+
+{% endblock %}

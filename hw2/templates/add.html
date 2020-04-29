@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Add Foodtruck</h2>
+    <form action="{{ url_for('add') }}" method=post>
+	<p class="heading">Name: <input type=text name=name>
+	<p class="heading">Street Address: <input type=text name=address>
+    <p class="heading">City: <input type=text name=city>
+    <p class="heading">State: <input type=text name=state>
+    <p class="heading">Zip Code: <input type=text name=zip>
+    <p class="heading">Store Hours: <input type=text name=hours>
+    <p class="heading">Phone Number: <input type=text name=phone>
+    <p class="heading">Rating: <input type=text name=rating>
+    <p class="heading">Pricing: <input type=text name=pricing>
+    <p class="heading">Parking: <input type=text name=parking>
+        <p class="heading">Review:
+	<textarea rows=5 cols=50 name=review></textarea></p>
+	<p><input type=submit value=Add></p>
+    </form>
+{% endblock %}
