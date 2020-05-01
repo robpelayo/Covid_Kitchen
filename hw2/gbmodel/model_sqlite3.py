@@ -8,9 +8,6 @@ Data is stored in a SQLite database that looks something like the following:
 | Truck      | 1400 Sw Street   | Portland   | OR    |
 +------------+------------------+------------+----------------+
 
-This can be created with the following SQL (see bottom of this file):
-
-    create table guestbook (name text, email text, signed_on date, message);
 
 """
 from .Model import Model
@@ -20,6 +17,9 @@ DB_FILE = 'entries.db'  # file for our Database
 
 
 class model(Model):
+    """
+    Handles the connection between the DB and the app
+    """
     def __init__(self):
         # Make sure our database exists
         connection = sqlite3.connect(DB_FILE)
