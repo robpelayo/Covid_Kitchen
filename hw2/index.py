@@ -5,8 +5,8 @@ import gbmodel
 class Index(MethodView):
     def get(self):
         """
-
-        :return:
+        Gets all the data in the database and puts it into a list
+        :return:list containing all reviews
         """
         model = gbmodel.get_model()
         entries = [dict(name=row[0], address=row[1], city=row[2],
