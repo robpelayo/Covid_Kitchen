@@ -1,11 +1,11 @@
 """
-A simple guestbook flask app.
-ata is stored in a SQLite database that looks something like the following:
+Simple Foodtruck review webapp
+Data is stored in a SQLite database that looks something like the following:
 
 +------------+------------------+------------+----------------+
-| Name       | Email            | signed_on  | message        |
+| Name       | Address          | City       | State |
 +============+==================+============+----------------+
-| John Doe   | jdoe@example.com | 2012-05-28 | Hello world    |
+| Truck      | 1400 Sw Street   | Portland   | OR    |
 +------------+------------------+------------+----------------+
 
 This can be created with the following SQL (see bottom of this file):
@@ -13,10 +13,11 @@ This can be created with the following SQL (see bottom of this file):
     create table guestbook (name text, email text, signed_on date, message);
 
 """
-from datetime import date
 from .Model import Model
 import sqlite3
-DB_FILE = 'entries.db'    # file for our Database
+
+DB_FILE = 'entries.db'  # file for our Database
+
 
 class model(Model):
     def __init__(self):
@@ -30,7 +31,7 @@ class model(Model):
                            "address text, "
                            "city text, "
                            "state text,"
-                           "zip text,"
+                           "zip integer,"
                            "hours text,"
                            "phone text,"
                            "rating text,"
@@ -57,7 +58,7 @@ class model(Model):
         :param address: String
         :param city: String
         :param state: String
-        :param zip: String
+        :param zip: Integer
         :param hours: String
         :param phone: String
         :param rating: String
@@ -67,22 +68,23 @@ class model(Model):
         :return: True
         :raises: Database errors on connection and insertion
         """
-        params = {'name':name,
-                  'address':address,
-                  'city':city,
-                  'state':state,
-                  'zip':zip,
-                  'hours':hours,
-                  'phone':phone,
-                  'rating':rating,
-                  'pricing':pricing,
-                  'parking':parking,
-                  'review':review}
+        params = {'name': name,
+                  'address': address,
+                  'city': city,
+                  'state': state,
+                  'zip': zip,
+                  'hours': hours,
+                  'phone': phone,
+                  'rating': rating,
+                  'pricing': pricing,
+                  'parking': parking,
+                  'review': review}
         connection = sqlite3.connect(DB_FILE)
         cursor = connection.cursor()
-        cursor.execute("insert into foodtrucks(name, address, city, state, zip, hours, phone, rating, pricing, parking, review) "
-                       "VALUES (:name, :address, :city, :state, :zip, :hours, :phone, :rating,"
-                       ":pricing, :parking, :review)", params)
+        cursor.execute(
+            "insert into foodtrucks(name, address, city, state, zip, hours, phone, rating, pricing, parking, review) "
+            "VALUES (:name, :address, :city, :state, :zip, :hours, :phone, :rating,"
+            ":pricing, :parking, :review)", params)
 
         connection.commit()
         cursor.close()
