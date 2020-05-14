@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Foodtrucks</h2>
+
+    <h3>Add <a href="{{ url_for('add') }}">here</a></h3>
+    <h3>Food Trucks Entries:</h3>
+    {% for entry in entries %}
+        <p class=entry>
+            {{ entry.name }}
+            <br>
+            {{ entry.address }}
+            <br>
+            {{ entry.city }}, {{ entry.state }} {{entry.zip}}
+            <br>
+            {{ entry.phone }} Open: {{ entry.hours }}
+            <br><br>
+            Rating: {{ entry.rating }}
+            <br>
+            Pricing: {{ entry.pricing }}
+            <br>
+            Parking: {{ entry.parking }}
+            <br>
+            {{ entry.review }}
+        </p>
+    {% endfor %}
+
+{% endblock %}
