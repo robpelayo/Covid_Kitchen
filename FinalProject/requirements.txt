@@ -1,0 +1,6 @@
+# Web framework
+flask
+render_template
+
+# API
+requests
