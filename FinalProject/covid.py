@@ -59,7 +59,7 @@ states = {
         '51': 'virgin islands',
         '52': 'virginia',
         '53': 'washington',
-        '54': 'west Virginia',
+        '54': 'west virginia',
         '55': 'wisconsin',
         '56': 'wyoming'
 }

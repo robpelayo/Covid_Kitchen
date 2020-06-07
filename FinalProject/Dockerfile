@@ -15,3 +15,4 @@ RUN pip install -r requirements.txt
 
 # Set the parameters to the program
 CMD exec gunicorn --bind :${PORT:-80} --workers 1 --threads 8 app:app
+

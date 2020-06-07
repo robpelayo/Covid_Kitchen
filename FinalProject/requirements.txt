@@ -1,6 +1,11 @@
 # Web framework
 flask
-render_template
 
 # API
 requests
+
+# AWS
+boto3
+
+# python WSGI HTTP server (connects web servers)
+gunicorn
