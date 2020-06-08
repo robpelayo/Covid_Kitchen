@@ -1,15 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h3>Change your state <a href="{{ url_for('covid') }}">here</a></h3>
-<!--    <form action="{{ url_for('index') }}" method=post>-->
-<!--        <input name="state">-->
-<!--        <input type="submit" value="Submit">-->
-<!--    </form>-->
-    <p class=covid_data>
-        {{covid_data.province}} has {{covid_data.confirmed}} confirmed cases.
-        <br>
-        {{covid_data.deaths}} deaths and {{covid_data.active}} active cases.
-    </p>
-
+    <h3>Add a state to track <a href="{{ url_for('covid') }}">here</a></h3>
+    {% for entry in entries %}
+        <p class=entry>
+            {{entry.state}} has {{entry.confirmed}} confirmed cases.
+            <br>
+            {{entry.deaths}} deaths and {{entry.active}} active cases.
+       </p>
+    {% endfor %}
 
 {% endblock %}

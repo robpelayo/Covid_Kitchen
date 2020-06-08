@@ -1,5 +1,6 @@
 from flask import render_template
 from flask.views import MethodView
+import gbmodel
 
 # class Index(MethodView):
 #     def get(self):
@@ -17,4 +18,7 @@ from flask.views import MethodView
 
 class Index(MethodView):
         def get(self):
-                return render_template('index.html', covid_data=None)
+                model = gbmodel.get_model()
+                entries = [dict(state=row[0], confirmed=row[1], deaths=row[2], active=row[3]) for row in model.select()]
+
+                return render_template('index.html', entries=entries)

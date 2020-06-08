@@ -1,6 +1,7 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from flask.views import MethodView
 from datetime import date, timedelta
+import gbmodel
 import requests
 import json
 
@@ -63,6 +64,8 @@ states = {
         '55': 'wisconsin',
         '56': 'wyoming'
 }
+
+
 class Covid(MethodView):
         def get(self):
                 return render_template('covid.html')
@@ -82,6 +85,15 @@ class Covid(MethodView):
                         data = json.loads(response.text)
                         position = int(list(states.keys())[list(states.values()).index(state)])
                         state_data = data[0]["provinces"][position]
-                        return render_template('index.html', covid_data=state_data)
+                        print(state_data['province'])
+                        model = gbmodel.get_model()
+                        model.insert(str(state_data['province']),
+                                     str(state_data['confirmed']),
+                                     str(state_data['deaths']),
+                                     str(state_data['active'])
+                                     )
+                        print(model)
+                        return redirect(url_for('index'))
+                # return render_template('index.html')
                 except:
                         return render_template('error.html')
