@@ -4,7 +4,11 @@ from datetime import date, timedelta
 import gbmodel
 import requests
 import json
+import os
 
+covid_api_key = os.environ['COVID_KEY']
+
+# state dictionary to track where in the JSON the state is
 states = {
         '0': 'alabama',
         '1': 'alaska',
@@ -68,32 +72,50 @@ states = {
 
 class Covid(MethodView):
         def get(self):
+                """
+                Serve the page
+                :return: covid.html
+                """
                 return render_template('covid.html')
 
         def post(self):
+                """
+                Uses API to get COVID data as of 2 days ago and enters into database
+                :return: redirect to index page
+                :exception: raises error on state not being in list and out of index error (wrong date or
+                            data not returned from API
+                """
                 url = "https://covid-19-data.p.rapidapi.com/report/country/name"
-                yesterday = date.today() - timedelta(days=1)
+
+                # Get the date
+                today = date.today()
+                yesterday = today - timedelta(2)
                 querystring = {"date-format": "YYYY-MM-DD", "format": "json", "date": yesterday, "name": "USA"}
 
                 headers = {
                         'x-rapidapi-host': "covid-19-data.p.rapidapi.com",
-                        'x-rapidapi-key': "46668a7331msh0a4505972740a46p1779c5jsn20e20848e83b"
+                        'x-rapidapi-key': covid_api_key
                 }
                 try:
                         state = request.form['state'].lower()
                         response = requests.request("GET", url, headers=headers, params=querystring)
+                        # turn data into JSON
                         data = json.loads(response.text)
+                        # Find the state in the dictionary
                         position = int(list(states.keys())[list(states.values()).index(state)])
+                        # Hone in on the specific state
                         state_data = data[0]["provinces"][position]
-                        print(state_data['province'])
+                        # Add to database
                         model = gbmodel.get_model()
                         model.insert(str(state_data['province']),
                                      str(state_data['confirmed']),
                                      str(state_data['deaths']),
                                      str(state_data['active'])
                                      )
-                        print(model)
                         return redirect(url_for('index'))
-                # return render_template('index.html')
-                except:
+                except IndexError:
+                        # If we attempt to get to the state but there is no data yet for that day
                         return render_template('error.html')
+                except:
+                        # User most likely entered incorrect state (not in the state list)
+                        return render_template('state_error.html')

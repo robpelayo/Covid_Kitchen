@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h3>Add a state to track <a href="{{ url_for('covid') }}">here</a></h3>
+    <h2>Covid Calories Counter</h2>
     {% for entry in entries %}
         <p class=entry>
             {{entry.state}} has {{entry.confirmed}} confirmed cases.
@@ -8,5 +8,17 @@
             {{entry.deaths}} deaths and {{entry.active}} active cases.
        </p>
     {% endfor %}
+    <p><a href="{{ url_for('covid') }}">Add</a> or <a href="{{ url_for('remove_state') }}">Remove</a> a tracked state.</p>
+    <h3>Add some food to track!</h3>
+    <form action="{{ url_for('index') }}" method=post>
+        <input name=food>
+        <input type=submit>
+    </form>
+    {% for entry in fentries %}
+        <p class=entry>
+            {{entry.name}}  -  {{entry.calories}} calories    {{entry.protein}}g protein    {{entry.fat}}g fat     {{entry.carbs}}g carbs    {{entry.fiber}}g fiber
+       </p>
+    {% endfor %}
+<p>Remove a food item <a href="{{ url_for('remove_food') }}">here</a></p>
 
 {% endblock %}

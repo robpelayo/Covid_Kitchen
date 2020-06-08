@@ -1,24 +1,38 @@
-from flask import render_template
+from flask import render_template, redirect, url_for, request
 from flask.views import MethodView
 import gbmodel
+import requests
+import json
+import os
 
-# class Index(MethodView):
-#     def get(self):
-#         """
-#         Gets all the data in the database and puts it into a list
-#         :return:list containing all reviews
-#         """
-#         model = gbmodel.get_model()
-#         entries = [dict(name=row[0], address=row[1], city=row[2],
-#                         state=row[3], zip=row[4], hours=row[5],
-#                         phone=row[6], rating=row[7],pricing=row[8],
-#                         parking=row[9], review=row[10]) for row in model.select()]
-#
-#         return render_template('index.html',entries=entries)
+food_api_key = os.environ['FOOD_KEY']
 
 class Index(MethodView):
         def get(self):
                 model = gbmodel.get_model()
-                entries = [dict(state=row[0], confirmed=row[1], deaths=row[2], active=row[3]) for row in model.select()]
+                state_entries = [dict(state=row[0], confirmed=row[1], deaths=row[2], active=row[3]) for row in model.select()]
+                food_entries = [dict(name=row[0], calories=row[1], protein=row[2], fat=row[3], carbs=row[4], fiber=row[5]) for row in model.food_select()]
 
-                return render_template('index.html', entries=entries)
+                return render_template('index.html', entries=state_entries, fentries=food_entries)
+
+        def post(self):
+                url = "https://edamam-food-and-grocery-database.p.rapidapi.com/parser"
+                food = request.form['food']
+                querystring = {"ingr": food}
+
+                headers = {
+                        'x-rapidapi-host': "edamam-food-and-grocery-database.p.rapidapi.com",
+                        'x-rapidapi-key': food_api_key
+                }
+
+                response = requests.request("GET", url, headers=headers, params=querystring)
+                data = response.json()
+                food_data = data["hints"][0]['food']
+                model = gbmodel.get_model()
+                model.food_insert(food_data['label'],
+                             int(food_data['nutrients']['ENERC_KCAL']),
+                             int(food_data['nutrients']['PROCNT']),
+                             int(food_data['nutrients']['FAT']),
+                             int(food_data['nutrients']['CHOCDF']),
+                             int(food_data['nutrients']['FIBTG']))
+                return redirect(url_for('index'))
