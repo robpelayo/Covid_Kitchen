@@ -14,6 +14,12 @@
         <input name=food>
         <input type=submit>
     </form>
+    <br>
+    <h4>Food Totals</h4>
+    <p>{{food_totals.calories}} Calories - {{food_totals.protein}}g Protein - {{food_totals.fat}}g Fat - {{food_totals.carbs}}g Carbs - {{food_totals.fiber}}g Fiber</p>
+    <br>
+    <h4>Tracked Food</h4>
+    <br>
     {% for entry in fentries %}
         <p class=entry>
             {{entry.name}}  -  {{entry.calories}} calories    {{entry.protein}}g protein    {{entry.fat}}g fat     {{entry.carbs}}g carbs    {{entry.fiber}}g fiber
