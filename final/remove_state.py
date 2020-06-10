@@ -9,7 +9,6 @@ class Remove_State(MethodView):
 
     def post(self):
         state_to_remove = request.form['state'].title()
-        print(state_to_remove)
         model = gbmodel.get_model()
         if model.delete(state_to_remove):
             return redirect(url_for('index'))

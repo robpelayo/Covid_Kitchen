@@ -7,7 +7,6 @@ class Remove_Food(MethodView):
         return render_template('remove_food.html')
     def post(self):
         food_to_remove = request.form['food']
-        print(food_to_remove)
         model = gbmodel.get_model()
         if model.food_delete(food_to_remove):
             return redirect(url_for('index'))
